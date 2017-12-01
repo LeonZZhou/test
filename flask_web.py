@@ -27,8 +27,9 @@ def getdata():
     c.execute("SELECT `time`,`mem_usage` FROM `stat`")
     ones = [[i[0]*1000, i[1]] for i in c.fetchall()]
     return "%s(%s);" % (request.args.get('callback'), json.dumps(ones))
-@app.route("/test",methods=["GET"])
-def test():
-    return render_template("test.html")
+@app.route("/<name>",methods=["GET"])
+def test(name):
+
+    return render_template("test.html",name=name)
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8888, debug=True)
