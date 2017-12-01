@@ -26,12 +26,9 @@ def hello():
 
 @app.route("/data", methods=["GET"])
 def getdata():
-    if signined == True:
-        c.execute("SELECT `time`,`mem_usage` FROM `stat`")
-        ones = [[i[0]*1000, i[1]] for i in c.fetchall()]
-        return "%s(%s);" % (request.args.get('callback'), json.dumps(ones))
-    else:
-        return render_template("signin_form.html")
+    c.execute("SELECT `time`,`mem_usage` FROM `stat`")
+    ones = [[i[0]*1000, i[1]] for i in c.fetchall()]
+    return "%s(%s);" % (request.args.get('callback'), json.dumps(ones))
 
 @app.route("/signin",methods=['GET'])
 def signin_form():
