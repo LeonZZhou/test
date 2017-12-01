@@ -87,4 +87,4 @@ if __name__ == "__main__":
         response = f.read()
         print response
         f.close()
-        time.sleep(60)
+        time.sleep(10)
