@@ -27,9 +27,21 @@ def getdata():
     c.execute("SELECT `time`,`mem_usage` FROM `stat`")
     ones = [[i[0]*1000, i[1]] for i in c.fetchall()]
     return "%s(%s);" % (request.args.get('callback'), json.dumps(ones))
+
+@app.route("/signin",methods=['GET'])
+def signin_form():
+    return render_template('signin_form.html')
+
+@app.route("/signin",methods=['POST'])
+def signin():
+    username = request.form['username']
+    passwd = request.form['passwd']
+    if username == 'admin' and passwd == 'qwer1234':
+        return render_template('mon.html')
+    return render_template('signin_form.html',message='Error user name or passwd!!',uname=username)
+
 @app.route("/<name>",methods=["GET"])
 def test(name):
-
     return render_template("test.html",name=name)
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8888, debug=True)
