@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<!-- saved from url=(0037)http://ju.outofmemory.cn/entry/126800 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-mobile-web-app-capable">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="description" content="这里以监控内存使用率为例，写的一个简单demo性程序，具体操作根据51reboot提供的教程写如下。
+一、建库建表创建falcon数据库：[代码片段]创建内存监控使用的表stat，表结构如下：[代码片段] 二、flask
+web端设置首先我们设计一个web服务，实现如下功能： 完成监控页面展示 接受POST提交上来的数据 提供json数据GET接口具体框架结构图如下：目录结
+
+">
+    <meta name="keywords" content="flask,python flask + mysql写的简单监控系统">
+    <title>flask + mysql写的简单监控系统 - 为程序员服务</title>
+    <link href="./flask + mysql写的简单监控系统 - 为程序员服务_files/17.1.css" type="text/css" rel="stylesheet">
+    
+    <link rel="shortcut icon" href="http://outofmemory.cn/favicon.ico" type="image/x-icon">
+    
+</head>
+<body>
+
+<header class="head">
+<div class="head-left">
+    <div class="logo"><a href="http://outofmemory.cn/">OutOfMemory.CN</a></div>
+    <div class="beta"><sup>β</sup></div>
+    <div class="nav">
+        <ul id="headNav">
+            <li class="current"><a href="http://ju.outofmemory.cn/" title="聚客：编程技术网站牛人牛博聚集地">聚客</a></li>
+            <li><a href="http://outofmemory.cn/code-snippet/" title="代码：分享代码 分享经验">代码</a></li>
+            <li><a href="http://j.outofmemory.cn/" title="技术专栏，精华">专栏</a></li>
+            <li><a href="http://outofmemory.cn/tutorial/" title="简单易学的技术教程">教程</a></li>
+            <li style="width:65px"><a href="http://maven.outofmemory.cn/" title="Maven信息库速查">Maven</a></li>
+            <li><a href="http://outofmemory.cn/github/" title="Github上的中国开源人">Gitter</a></li>
+            <li><a href="http://outofmemory.cn/tag/" title="标签">标签</a></li>
+        </ul>
+    </div>
+</div>
+<div class="head-right">
+<div class="userStatus"><a class="signin" target="_self" href="http://outofmemory.cn/user/login"><i></i><b>登录</b></a><a class="signup" target="_self" href="http://outofmemory.cn/user/register"><i></i><b>注册</b></a></div>
+</div>
+</header>
+
+
+<div class="tgL books"><span>&nbsp;</span>好书：<a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEgJSG1wcACJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIXAFUcUhcdS0IJRmtRcU0FBxowcGcQcTUYIUBlVHwyXyZlDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBRElgRBhACUCtcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsVBxUHUhJZCltXWwg%3D" target="_blank">Python基础教程（第2版 修订版）</a>[<a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEgJSG1wcACJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIXAFUcUhcdS0IJRmtRcU0FBxowcGcQcTUYIUBlVHwyXyZlDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBRElgRBhACUCtcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsVBxUHUhJZCltXWwg%3D" target="_blank">京东</a> &nbsp; <a href="https://www.amazon.cn/gp/product/B00KAFX65Q/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;camp=536&amp;creative=3200&amp;creativeASIN=B00KAFX65Q&amp;linkCode=as2&amp;tag=oucn-23" target="_blank">亚马逊</a>]<span class="sep"> | </span><a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEg9XHFgXCyJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIaBVIYWRwdS0IJRmt2d1lFKxspU2cXfRdDWBZKS3JTYwFDDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBREl4XChsCXStcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsVChAAVhlSCltXWwg%3D" target="_blank">Python核心编程（第3版）</a>[<a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEg9XHFgXCyJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIaBVIYWRwdS0IJRmt2d1lFKxspU2cXfRdDWBZKS3JTYwFDDh43UxhZHQ" target="_blank">京东</a> &nbsp; <a href="https://www.amazon.cn/gp/product/B01FQAS0KK/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;camp=536&amp;creative=3200&amp;creativeASIN=B01FQAS0KK&amp;linkCode=as2&amp;tag=oucn-23" target="_blank">亚马逊</a>]<span class="sep"> | </span><a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEg9cGVgWBCJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIaDlcYWBMdS0IJRmtxHEJASxkmbWFoQwxcBF4HQU41XzxDDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBREl8VAhsAVytcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsVChsFVhhdCltXWwg%3D" target="_blank">Python机器学习及实践：从零开始通往Kaggle竞赛之路</a>[<a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEg9cGVgWBCJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIaDlcYWBMdS0IJRmtxHEJASxkmbWFoQwxcBF4HQU41XzxDDh43UxhZHQ" target="_blank">京东</a> &nbsp; <a href="https://www.amazon.cn/gp/product/B01M9813G3/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;camp=536&amp;creative=3200&amp;creativeASIN=B01M9813G3&amp;linkCode=as2&amp;tag=oucn-23" target="_blank">亚马逊</a>]<span class="sep"> | </span><a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEw9RHVoVBCJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMaA1MaWxMdS0IJRmtKf2xeKGgBXWFRdRN8ARxkaAQyRBN1Dh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBREl8TAhEAXStcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUChYBVBtdCltXWwg%3D" target="_blank">O'Reilly：深入浅出 Python（中文版）</a>[<a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEw9RHVoVBCJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMaA1MaWxMdS0IJRmtKf2xeKGgBXWFRdRN8ARxkaAQyRBN1Dh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBREl8TAhEAXStcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUChYBVBtdCltXWwg%3D" target="_blank">京东</a>]</div><div class="wrap">
+<div class="content"><h1>flask + mysql写的简单监控系统</h1>
+<div class="meta">
+    <a href="http://ju.outofmemory.cn/feed/1711/" title="运维之路"><i class="ico man"></i>运维之路</a>
+    <time><i class="ico date"></i>2015-04-08</time>
+    <span class="pv"><b>10913</b> 阅读</span>
+</div>
+<div class="tags">
+<a class="tag" href="http://ju.outofmemory.cn/tag/flask/">flask</a>
+
+<a class="tag" href="http://ju.outofmemory.cn/tag/python/">python</a>
+
+</div>
+
+<script src="./flask + mysql写的简单监控系统 - 为程序员服务_files/hm.js"></script><script async="" src="./flask + mysql写的简单监控系统 - 为程序员服务_files/analytics.js"></script><script>
+    function imgError(img){
+        if (typeof img.hasReplaceSrc != 'undefined'){
+            var refer = $('div.author a:last').attr('href');
+            img.src = '/imgr?src=' + encodeURIComponent(img.src) + '&r=' + encodeURIComponent(refer);
+        } else {
+            var urlPattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
+            for (var i=0;i<img.attributes.length;i++){
+                var attrName = img.attributes[i].nodeName;
+                var attrVal = img.attributes[i].nodeValue;
+                if(attrName.toLowerCase() != 'src' && urlPattern.test(attrVal)){
+                    img.src = attrVal;
+                    img.hasReplaceSrc=true;
+                    break;
+                }
+            }
+        }
+        return true;
+    }
+</script>
+<p>这里以监控内存使用率为例，写的一个简单demo性程序，具体操作根据51reboot提供的教程写如下。</p><h4> 一、建库建表<br></h4><p>创建falcon数据库：</p><pre class="prettyprint prettyprinted" style=""><code class="prettyprint"><span class="pln">mysql</span><span class="pun">&gt;</span><span class="pln"> create database falcon character </span><span class="kwd">set</span><span class="pln"> utf8</span><span class="pun">;</span><span class="pln">
+</span><span class="typ">Query</span><span class="pln"> OK</span><span class="pun">,</span><span class="pln"> </span><span class="lit">1</span><span class="pln"> row affected </span><span class="pun">(</span><span class="lit">0.00</span><span class="pln"> sec</span><span class="pun">)</span></code></pre><p>创建内存监控使用的表stat，表结构如下：</p><pre class="prettyprint prettyprinted" style=""><code class="prettyprint"><span class="pln">CREATE TABLE </span><span class="str">`stat`</span><span class="pln"> </span><span class="pun">(</span><span class="pln">
+  </span><span class="str">`id`</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">(</span><span class="lit">11</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">unsigned</span><span class="pln"> NOT NULL AUTO_INCREMENT</span><span class="pun">,</span><span class="pln">
+  </span><span class="str">`host`</span><span class="pln"> varchar</span><span class="pun">(</span><span class="lit">256</span><span class="pun">)</span><span class="pln"> DEFAULT NULL</span><span class="pun">,</span><span class="pln">
+  </span><span class="str">`mem_free`</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">(</span><span class="lit">11</span><span class="pun">)</span><span class="pln"> DEFAULT NULL</span><span class="pun">,</span><span class="pln">
+  </span><span class="str">`mem_usage`</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">(</span><span class="lit">11</span><span class="pun">)</span><span class="pln"> DEFAULT NULL</span><span class="pun">,</span><span class="pln">
+  </span><span class="str">`mem_total`</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">(</span><span class="lit">11</span><span class="pun">)</span><span class="pln"> DEFAULT NULL</span><span class="pun">,</span><span class="pln">
+  </span><span class="str">`load_avg`</span><span class="pln"> varchar</span><span class="pun">(</span><span class="lit">128</span><span class="pun">)</span><span class="pln"> DEFAULT NULL</span><span class="pun">,</span><span class="pln">
+  </span><span class="str">`time`</span><span class="pln"> bigint</span><span class="pun">(</span><span class="lit">11</span><span class="pun">)</span><span class="pln"> DEFAULT NULL</span><span class="pun">,</span><span class="pln">
+  PRIMARY KEY </span><span class="pun">(</span><span class="str">`id`</span><span class="pun">),</span><span class="pln">
+  KEY </span><span class="str">`host`</span><span class="pln"> </span><span class="pun">(</span><span class="str">`host`</span><span class="pun">(</span><span class="lit">255</span><span class="pun">))</span><span class="pln">
+</span><span class="pun">)</span><span class="pln"> ENGINE</span><span class="pun">=</span><span class="typ">InnoDB</span><span class="pln"> AUTO_INCREMENT</span><span class="pun">=</span><span class="lit">0</span><span class="pln"> DEFAULT CHARSET</span><span class="pun">=</span><span class="pln">utf8</span><span class="pun">;</span></code></pre><h4> 二、flask web端设置<br></h4><p>首先我们设计一个web服务，实现如下功能：</p><ul><li> 完成监控页面展示&nbsp;</li><li> 接受POST提交上来的数据&nbsp;</li><li> 提供json数据GET接口</li></ul><p>具体框架结构图如下：</p><p><a rel="nofollow external" href="http://www.361way.com/wp-content/uploads/2015/04/flask-monitor.png"><img alt="flask-monitor" class="alignnone size-full wp-image-4262" height="380" src="./flask + mysql写的简单监控系统 - 为程序员服务_files/imgr" width="907" onerror="return imgError(this)"></a></p><p>目录结构如下：</p><pre class="prettyprint prettyprinted" style=""><code class="prettyprint"><span class="pln">web
+</span><span class="pun">├──</span><span class="pln"> flask_web</span><span class="pun">.</span><span class="pln">py
+</span><span class="pun">└──</span><span class="pln"> templates
+    </span><span class="pun">└──</span><span class="pln"> mon</span><span class="pun">.</span><span class="pln">html</span></code></pre><p>flask_web代码如下：</p><pre class="prettyprint prettyprinted" style=""><code class="prettyprint"><span class="kwd">import</span><span class="pln"> </span><span class="typ">MySQLdb</span><span class="pln"> </span><span class="kwd">as</span><span class="pln"> mysql
+</span><span class="kwd">import</span><span class="pln"> json
+</span><span class="kwd">from</span><span class="pln"> flask </span><span class="kwd">import</span><span class="pln"> </span><span class="typ">Flask</span><span class="pun">,</span><span class="pln"> request</span><span class="pun">,</span><span class="pln"> render_template
+app </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Flask</span><span class="pun">(</span><span class="pln">__name__</span><span class="pun">)</span><span class="pln">
+db </span><span class="pun">=</span><span class="pln"> mysql</span><span class="pun">.</span><span class="pln">connect</span><span class="pun">(</span><span class="pln">user</span><span class="pun">=</span><span class="str">"361way"</span><span class="pun">,</span><span class="pln"> passwd</span><span class="pun">=</span><span class="str">"123456"</span><span class="pun">,</span><span class="pln"> \
+        db</span><span class="pun">=</span><span class="str">"falcon"</span><span class="pun">,</span><span class="pln"> charset</span><span class="pun">=</span><span class="str">"utf8"</span><span class="pun">)</span><span class="pln">
+db</span><span class="pun">.</span><span class="pln">autocommit</span><span class="pun">(</span><span class="kwd">True</span><span class="pun">)</span><span class="pln">
+c </span><span class="pun">=</span><span class="pln"> db</span><span class="pun">.</span><span class="pln">cursor</span><span class="pun">()</span><span class="pln">
+</span><span class="lit">@app</span><span class="pun">.</span><span class="pln">route</span><span class="pun">(</span><span class="str">"/"</span><span class="pun">,</span><span class="pln"> methods</span><span class="pun">=[</span><span class="str">"GET"</span><span class="pun">,</span><span class="pln"> </span><span class="str">"POST"</span><span class="pun">])</span><span class="pln">
+</span><span class="kwd">def</span><span class="pln"> hello</span><span class="pun">():</span><span class="pln">
+    sql </span><span class="pun">=</span><span class="pln"> </span><span class="str">""</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> request</span><span class="pun">.</span><span class="pln">method </span><span class="pun">==</span><span class="pln"> </span><span class="str">"POST"</span><span class="pun">:</span><span class="pln">
+        data </span><span class="pun">=</span><span class="pln"> request</span><span class="pun">.</span><span class="pln">json
+        </span><span class="kwd">try</span><span class="pun">:</span><span class="pln">
+            sql </span><span class="pun">=</span><span class="pln"> </span><span class="str">"INSERT INTO `stat` (`host`,`mem_free`,`mem_usage`,`mem_total`,`load_avg`,`time`) VALUES('%s', '%d', '%d', '%d', '%s', '%d')"</span><span class="pln"> </span><span class="pun">%</span><span class="pln"> </span><span class="pun">(</span><span class="pln">data</span><span class="pun">[</span><span class="str">'Host'</span><span class="pun">],</span><span class="pln"> data</span><span class="pun">[</span><span class="str">'MemFree'</span><span class="pun">],</span><span class="pln"> data</span><span class="pun">[</span><span class="str">'MemUsage'</span><span class="pun">],</span><span class="pln"> data</span><span class="pun">[</span><span class="str">'MemTotal'</span><span class="pun">],</span><span class="pln"> data</span><span class="pun">[</span><span class="str">'LoadAvg'</span><span class="pun">],</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">(</span><span class="pln">data</span><span class="pun">[</span><span class="str">'Time'</span><span class="pun">]))</span><span class="pln">
+            ret </span><span class="pun">=</span><span class="pln"> c</span><span class="pun">.</span><span class="pln">execute</span><span class="pun">(</span><span class="pln">sql</span><span class="pun">)</span><span class="pln">
+        </span><span class="kwd">except</span><span class="pln"> mysql</span><span class="pun">.</span><span class="typ">IntegrityError</span><span class="pun">:</span><span class="pln">
+            </span><span class="kwd">pass</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> </span><span class="str">"OK"</span><span class="pln">
+    </span><span class="kwd">else</span><span class="pun">:</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> render_template</span><span class="pun">(</span><span class="str">"mon.html"</span><span class="pun">)</span><span class="pln">
+</span><span class="lit">@app</span><span class="pun">.</span><span class="pln">route</span><span class="pun">(</span><span class="str">"/data"</span><span class="pun">,</span><span class="pln"> methods</span><span class="pun">=[</span><span class="str">"GET"</span><span class="pun">])</span><span class="pln">
+</span><span class="kwd">def</span><span class="pln"> getdata</span><span class="pun">():</span><span class="pln">
+    c</span><span class="pun">.</span><span class="pln">execute</span><span class="pun">(</span><span class="str">"SELECT `time`,`mem_usage` FROM `stat`"</span><span class="pun">)</span><span class="pln">
+    ones </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[[</span><span class="pln">i</span><span class="pun">[</span><span class="lit">0</span><span class="pun">]*</span><span class="lit">1000</span><span class="pun">,</span><span class="pln"> i</span><span class="pun">[</span><span class="lit">1</span><span class="pun">]]</span><span class="pln"> </span><span class="kwd">for</span><span class="pln"> i </span><span class="kwd">in</span><span class="pln"> c</span><span class="pun">.</span><span class="pln">fetchall</span><span class="pun">()]</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="str">"%s(%s);"</span><span class="pln"> </span><span class="pun">%</span><span class="pln"> </span><span class="pun">(</span><span class="pln">request</span><span class="pun">.</span><span class="pln">args</span><span class="pun">.</span><span class="kwd">get</span><span class="pun">(</span><span class="str">'callback'</span><span class="pun">),</span><span class="pln"> json</span><span class="pun">.</span><span class="pln">dumps</span><span class="pun">(</span><span class="pln">ones</span><span class="pun">))</span><span class="pln">
+</span><span class="kwd">if</span><span class="pln"> __name__ </span><span class="pun">==</span><span class="pln"> </span><span class="str">"__main__"</span><span class="pun">:</span><span class="pln">
+    app</span><span class="pun">.</span><span class="pln">run</span><span class="pun">(</span><span class="pln">host</span><span class="pun">=</span><span class="str">"0.0.0.0"</span><span class="pun">,</span><span class="pln"> port</span><span class="pun">=</span><span class="lit">8888</span><span class="pun">,</span><span class="pln"> debug</span><span class="pun">=</span><span class="kwd">True</span><span class="pun">)</span></code></pre><p>这里使用的汇图JS为highcharts、highstock &nbsp;，具体模板页面内容如下：</p><pre class="prettyprint prettyprinted" style=""><code class="prettyprint"><span class="pun">[</span><span class="pln">root@91it templates</span><span class="pun">]#</span><span class="pln"> cat mon</span><span class="pun">.</span><span class="pln">html
+</span><span class="str">&lt;title&gt;</span><span class="pln">memory monitor</span><span class="pun">&lt;/</span><span class="pln">title</span><span class="pun">&gt;</span><span class="pln">
+</span><span class="pun">&lt;!</span><span class="pln">DOCTYPE HTML</span><span class="pun">&gt;</span><span class="pln">
+</span><span class="str">&lt;html&gt;</span><span class="pln">
+    </span><span class="str">&lt;head&gt;</span><span class="pln">
+        </span><span class="pun">&lt;</span><span class="pln">meta http</span><span class="pun">-</span><span class="pln">equiv</span><span class="pun">=</span><span class="str">"Content-Type"</span><span class="pln"> content</span><span class="pun">=</span><span class="str">"text/html; charset=utf-8"</span><span class="pun">&gt;</span><span class="pln">
+        </span><span class="str">&lt;title&gt;</span><span class="typ">Highstock</span><span class="pln"> </span><span class="typ">Example</span><span class="pun">&lt;/</span><span class="pln">title</span><span class="pun">&gt;</span><span class="pln">
+        </span><span class="pun">&lt;!--</span><span class="pln"> </span><span class="pun">&lt;</span><span class="pln">script type</span><span class="pun">=</span><span class="str">"text/javascript"</span><span class="pln"> src</span><span class="pun">=</span><span class="str">"{{ url_for('static', filename='jquery.min.js') }}"</span><span class="pun">&gt;&lt;/</span><span class="pln">script</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">--&gt;</span><span class="pln">
+        </span><span class="pun">&lt;</span><span class="pln">script type</span><span class="pun">=</span><span class="str">"text/javascript"</span><span class="pln"> src</span><span class="pun">=</span><span class="str">"/imgr?src=http%3A%2F%2Fajax.useso.com%2Fajax%2Flibs%2Fjquery%2F1.8.2%2Fjquery.min.js&amp;r=http%3A%2F%2Fwww.361way.com%2Fflask-mysql-highcharts-monitor%2F4261.html"</span><span class="pun">&gt;&lt;/</span><span class="pln">script</span><span class="pun">&gt;</span><span class="pln">
+        </span><span class="pun">&lt;</span><span class="pln">style type</span><span class="pun">=</span><span class="str">"text/css"</span><span class="pun">&gt;</span><span class="pln">
+$</span><span class="pun">{</span><span class="pln">demo</span><span class="pun">.</span><span class="pln">css</span><span class="pun">}</span><span class="pln">
+        </span><span class="pun">&lt;/</span><span class="pln">style</span><span class="pun">&gt;</span><span class="pln">
+        </span><span class="pun">&lt;</span><span class="pln">script type</span><span class="pun">=</span><span class="str">"text/javascript"</span><span class="pun">&gt;</span><span class="pln">
+$</span><span class="pun">(</span><span class="kwd">function</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    $</span><span class="pun">.</span><span class="pln">getJSON</span><span class="pun">(</span><span class="str">'/data?callback=?'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">(</span><span class="pln">data</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="com">// Create the chart</span><span class="pln">
+        $</span><span class="pun">(</span><span class="str">'#container'</span><span class="pun">).</span><span class="pln">highcharts</span><span class="pun">(</span><span class="str">'StockChart'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            rangeSelector</span><span class="pun">:</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+                inputEnabled</span><span class="pun">:</span><span class="pln"> $</span><span class="pun">(</span><span class="str">'#container'</span><span class="pun">).</span><span class="pln">width</span><span class="pun">()</span><span class="pln"> </span><span class="pun">&gt;</span><span class="pln"> </span><span class="lit">480</span><span class="pun">,</span><span class="pln">
+                selected</span><span class="pun">:</span><span class="pln"> </span><span class="lit">1</span><span class="pln">
+            </span><span class="pun">},</span><span class="pln">
+            title</span><span class="pun">:</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+                text</span><span class="pun">:</span><span class="pln"> </span><span class="str">'memory monitor'</span><span class="pln">
+            </span><span class="pun">},</span><span class="pln">
+            series</span><span class="pun">:</span><span class="pln"> </span><span class="pun">[{</span><span class="pln">
+                name</span><span class="pun">:</span><span class="pln"> </span><span class="str">'memory monitor'</span><span class="pun">,</span><span class="pln">
+                data</span><span class="pun">:</span><span class="pln"> data</span><span class="pun">,</span><span class="pln">
+                type</span><span class="pun">:</span><span class="pln"> </span><span class="str">'spline'</span><span class="pun">,</span><span class="pln">
+                tooltip</span><span class="pun">:</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+                    valueDecimals</span><span class="pun">:</span><span class="pln"> </span><span class="lit">2</span><span class="pln">
+                </span><span class="pun">}</span><span class="pln">
+            </span><span class="pun">}]</span><span class="pln">
+        </span><span class="pun">});</span><span class="pln">
+    </span><span class="pun">});</span><span class="pln">
+</span><span class="pun">});</span><span class="pln">
+        </span><span class="pun">&lt;/</span><span class="pln">script</span><span class="pun">&gt;</span><span class="pln">
+    </span><span class="pun">&lt;/</span><span class="pln">head</span><span class="pun">&gt;</span><span class="pln">
+    </span><span class="str">&lt;body&gt;</span><span class="pln">
+</span><span class="pun">&lt;!--</span><span class="pln"> </span><span class="pun">&lt;</span><span class="pln">script src</span><span class="pun">=</span><span class="str">"{{ url_for('static', filename='highstock.js') }}"</span><span class="pun">&gt;&lt;/</span><span class="pln">script</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">--&gt;</span><span class="pln">
+</span><span class="pun">&lt;</span><span class="pln">script src</span><span class="pun">=</span><span class="str">"/imgr?src=http%3A%2F%2Fcdnjs.cloudflare.com%2Fajax%2Flibs%2Fhighstock%2F2.0.4%2Fhighstock.js&amp;r=http%3A%2F%2Fwww.361way.com%2Fflask-mysql-highcharts-monitor%2F4261.html"</span><span class="pun">&gt;&lt;/</span><span class="pln">script</span><span class="pun">&gt;</span><span class="pln">
+</span><span class="pun">&lt;!--</span><span class="pln"> </span><span class="pun">&lt;</span><span class="pln">script src</span><span class="pun">=</span><span class="str">"{{ url_for('static', filename='exporting.js') }}"</span><span class="pun">&gt;&lt;/</span><span class="pln">script</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">--&gt;</span><span class="pln">
+</span><span class="pun">&lt;</span><span class="pln">script src</span><span class="pun">=</span><span class="str">"/imgr?src=http%3A%2F%2Fcode.highcharts.com%2Fmodules%2Fexporting.js&amp;r=http%3A%2F%2Fwww.361way.com%2Fflask-mysql-highcharts-monitor%2F4261.html"</span><span class="pun">&gt;&lt;/</span><span class="pln">script</span><span class="pun">&gt;</span><span class="pln">
+</span><span class="pun">&lt;</span><span class="pln">div id</span><span class="pun">=</span><span class="str">"container"</span><span class="pln"> style</span><span class="pun">=</span><span class="str">"height: 400px"</span><span class="pun">&gt;&lt;/</span><span class="pln">div</span><span class="pun">&gt;</span><span class="pln">
+    </span><span class="pun">&lt;/</span><span class="pln">body</span><span class="pun">&gt;</span><span class="pln">
+</span><span class="pun">&lt;/</span><span class="pln">html</span><span class="pun">&gt;</span></code></pre><p>注：这里的JS代码都直接使用互联网上的代码，如果主机无法连接互联网的，可以将上面的三段代取取下来，在templates 的同级目录创建static 目录，将下载下来的三个文件放到该目录，删除模板中三处引用javascript处的代码，使用当前注释的三段。</p><h4> 三、agent被监控端设置<br></h4><p>web展示页面完成了，运行起来：python flask_web.py 监听在8888端口上。我们需要做一个agent来采集数据，并通过post方法请求flask_web页面，将数据上传写入数据库。这里以监控内存为例，具体监控代码如下：</p><pre class="prettyprint prettyprinted" style=""><code class="prettyprint"><span class="com">#!/usr/bin/env python</span><span class="pln">
+</span><span class="com">#coding=utf-8</span><span class="pln">
+</span><span class="kwd">import</span><span class="pln"> inspect
+</span><span class="kwd">import</span><span class="pln"> time
+</span><span class="kwd">import</span><span class="pln"> urllib</span><span class="pun">,</span><span class="pln"> urllib2
+</span><span class="kwd">import</span><span class="pln"> json
+</span><span class="kwd">import</span><span class="pln"> socket
+</span><span class="kwd">class</span><span class="pln"> mon</span><span class="pun">:</span><span class="pln">
+    </span><span class="kwd">def</span><span class="pln"> __init__</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">):</span><span class="pln">
+        </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">data </span><span class="pun">=</span><span class="pln"> </span><span class="pun">{}</span><span class="pln">
+    </span><span class="kwd">def</span><span class="pln"> getTime</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">):</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> str</span><span class="pun">(</span><span class="kwd">int</span><span class="pun">(</span><span class="pln">time</span><span class="pun">.</span><span class="pln">time</span><span class="pun">())</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="lit">8</span><span class="pln"> </span><span class="pun">*</span><span class="pln"> </span><span class="lit">3600</span><span class="pun">)</span><span class="pln">
+    </span><span class="kwd">def</span><span class="pln"> getHost</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">):</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> socket</span><span class="pun">.</span><span class="pln">gethostname</span><span class="pun">()</span><span class="pln">
+    </span><span class="kwd">def</span><span class="pln"> getLoadAvg</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">):</span><span class="pln">
+        </span><span class="kwd">with</span><span class="pln"> open</span><span class="pun">(</span><span class="str">'/proc/loadavg'</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">as</span><span class="pln"> load_open</span><span class="pun">:</span><span class="pln">
+            a </span><span class="pun">=</span><span class="pln"> load_open</span><span class="pun">.</span><span class="pln">read</span><span class="pun">().</span><span class="pln">split</span><span class="pun">()[:</span><span class="lit">3</span><span class="pun">]</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> </span><span class="str">','</span><span class="pun">.</span><span class="pln">join</span><span class="pun">(</span><span class="pln">a</span><span class="pun">)</span><span class="pln">
+    </span><span class="kwd">def</span><span class="pln"> getMemTotal</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">):</span><span class="pln">
+        </span><span class="kwd">with</span><span class="pln"> open</span><span class="pun">(</span><span class="str">'/proc/meminfo'</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">as</span><span class="pln"> mem_open</span><span class="pun">:</span><span class="pln">
+            a </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">(</span><span class="pln">mem_open</span><span class="pun">.</span><span class="pln">readline</span><span class="pun">().</span><span class="pln">split</span><span class="pun">()[</span><span class="lit">1</span><span class="pun">])</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> a </span><span class="pun">/</span><span class="pln"> </span><span class="lit">1024</span><span class="pln">
+    </span><span class="kwd">def</span><span class="pln"> getMemUsage</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">,</span><span class="pln"> noBufferCache</span><span class="pun">=</span><span class="kwd">True</span><span class="pun">):</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> noBufferCache</span><span class="pun">:</span><span class="pln">
+            </span><span class="kwd">with</span><span class="pln"> open</span><span class="pun">(</span><span class="str">'/proc/meminfo'</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">as</span><span class="pln"> mem_open</span><span class="pun">:</span><span class="pln">
+                T </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">(</span><span class="pln">mem_open</span><span class="pun">.</span><span class="pln">readline</span><span class="pun">().</span><span class="pln">split</span><span class="pun">()[</span><span class="lit">1</span><span class="pun">])</span><span class="pln">
+                F </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">(</span><span class="pln">mem_open</span><span class="pun">.</span><span class="pln">readline</span><span class="pun">().</span><span class="pln">split</span><span class="pun">()[</span><span class="lit">1</span><span class="pun">])</span><span class="pln">
+                B </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">(</span><span class="pln">mem_open</span><span class="pun">.</span><span class="pln">readline</span><span class="pun">().</span><span class="pln">split</span><span class="pun">()[</span><span class="lit">1</span><span class="pun">])</span><span class="pln">
+                C </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">(</span><span class="pln">mem_open</span><span class="pun">.</span><span class="pln">readline</span><span class="pun">().</span><span class="pln">split</span><span class="pun">()[</span><span class="lit">1</span><span class="pun">])</span><span class="pln">
+                </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">(</span><span class="pln">T</span><span class="pun">-</span><span class="pln">F</span><span class="pun">-</span><span class="pln">B</span><span class="pun">-</span><span class="pln">C</span><span class="pun">)/</span><span class="lit">1024</span><span class="pln">
+        </span><span class="kwd">else</span><span class="pun">:</span><span class="pln">
+            </span><span class="kwd">with</span><span class="pln"> open</span><span class="pun">(</span><span class="str">'/proc/meminfo'</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">as</span><span class="pln"> mem_open</span><span class="pun">:</span><span class="pln">
+                a </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">(</span><span class="pln">mem_open</span><span class="pun">.</span><span class="pln">readline</span><span class="pun">().</span><span class="pln">split</span><span class="pun">()[</span><span class="lit">1</span><span class="pun">])</span><span class="pln"> </span><span class="pun">-</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">(</span><span class="pln">mem_open</span><span class="pun">.</span><span class="pln">readline</span><span class="pun">().</span><span class="pln">split</span><span class="pun">()[</span><span class="lit">1</span><span class="pun">])</span><span class="pln">
+                </span><span class="kwd">return</span><span class="pln"> a </span><span class="pun">/</span><span class="pln"> </span><span class="lit">1024</span><span class="pln">
+    </span><span class="kwd">def</span><span class="pln"> getMemFree</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">,</span><span class="pln"> noBufferCache</span><span class="pun">=</span><span class="kwd">True</span><span class="pun">):</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> noBufferCache</span><span class="pun">:</span><span class="pln">
+            </span><span class="kwd">with</span><span class="pln"> open</span><span class="pun">(</span><span class="str">'/proc/meminfo'</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">as</span><span class="pln"> mem_open</span><span class="pun">:</span><span class="pln">
+                T </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">(</span><span class="pln">mem_open</span><span class="pun">.</span><span class="pln">readline</span><span class="pun">().</span><span class="pln">split</span><span class="pun">()[</span><span class="lit">1</span><span class="pun">])</span><span class="pln">
+                F </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">(</span><span class="pln">mem_open</span><span class="pun">.</span><span class="pln">readline</span><span class="pun">().</span><span class="pln">split</span><span class="pun">()[</span><span class="lit">1</span><span class="pun">])</span><span class="pln">
+                B </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">(</span><span class="pln">mem_open</span><span class="pun">.</span><span class="pln">readline</span><span class="pun">().</span><span class="pln">split</span><span class="pun">()[</span><span class="lit">1</span><span class="pun">])</span><span class="pln">
+                C </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">(</span><span class="pln">mem_open</span><span class="pun">.</span><span class="pln">readline</span><span class="pun">().</span><span class="pln">split</span><span class="pun">()[</span><span class="lit">1</span><span class="pun">])</span><span class="pln">
+                </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">(</span><span class="pln">F</span><span class="pun">+</span><span class="pln">B</span><span class="pun">+</span><span class="pln">C</span><span class="pun">)/</span><span class="lit">1024</span><span class="pln">
+        </span><span class="kwd">else</span><span class="pun">:</span><span class="pln">
+            </span><span class="kwd">with</span><span class="pln"> open</span><span class="pun">(</span><span class="str">'/proc/meminfo'</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">as</span><span class="pln"> mem_open</span><span class="pun">:</span><span class="pln">
+                mem_open</span><span class="pun">.</span><span class="pln">readline</span><span class="pun">()</span><span class="pln">
+                a </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">(</span><span class="pln">mem_open</span><span class="pun">.</span><span class="pln">readline</span><span class="pun">().</span><span class="pln">split</span><span class="pun">()[</span><span class="lit">1</span><span class="pun">])</span><span class="pln">
+                </span><span class="kwd">return</span><span class="pln"> a </span><span class="pun">/</span><span class="pln"> </span><span class="lit">1024</span><span class="pln">
+    </span><span class="kwd">def</span><span class="pln"> runAllGet</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">):</span><span class="pln">
+        </span><span class="com">#自动获取mon类里的所有getXXX方法，用XXX作为key，getXXX()的返回值作为value，构造字典</span><span class="pln">
+        </span><span class="kwd">for</span><span class="pln"> fun </span><span class="kwd">in</span><span class="pln"> inspect</span><span class="pun">.</span><span class="pln">getmembers</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">,</span><span class="pln"> predicate</span><span class="pun">=</span><span class="pln">inspect</span><span class="pun">.</span><span class="pln">ismethod</span><span class="pun">):</span><span class="pln">
+            </span><span class="kwd">if</span><span class="pln"> fun</span><span class="pun">[</span><span class="lit">0</span><span class="pun">][:</span><span class="lit">3</span><span class="pun">]</span><span class="pln"> </span><span class="pun">==</span><span class="pln"> </span><span class="str">'get'</span><span class="pun">:</span><span class="pln">
+                </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">data</span><span class="pun">[</span><span class="pln">fun</span><span class="pun">[</span><span class="lit">0</span><span class="pun">][</span><span class="lit">3</span><span class="pun">:]]</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> fun</span><span class="pun">[</span><span class="lit">1</span><span class="pun">]()</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">data
+</span><span class="kwd">if</span><span class="pln"> __name__ </span><span class="pun">==</span><span class="pln"> </span><span class="str">"__main__"</span><span class="pun">:</span><span class="pln">
+    </span><span class="kwd">while</span><span class="pln"> </span><span class="kwd">True</span><span class="pun">:</span><span class="pln">
+        m </span><span class="pun">=</span><span class="pln"> mon</span><span class="pun">()</span><span class="pln">
+        data </span><span class="pun">=</span><span class="pln"> m</span><span class="pun">.</span><span class="pln">runAllGet</span><span class="pun">()</span><span class="pln">
+        </span><span class="kwd">print</span><span class="pln"> data
+        req </span><span class="pun">=</span><span class="pln"> urllib2</span><span class="pun">.</span><span class="typ">Request</span><span class="pun">(</span><span class="str">"http://test.361way.com:8888"</span><span class="pun">,</span><span class="pln"> json</span><span class="pun">.</span><span class="pln">dumps</span><span class="pun">(</span><span class="pln">data</span><span class="pun">),</span><span class="pln"> </span><span class="pun">{</span><span class="str">'Content-Type'</span><span class="pun">:</span><span class="pln"> </span><span class="str">'application/json'</span><span class="pun">})</span><span class="pln">
+        f </span><span class="pun">=</span><span class="pln"> urllib2</span><span class="pun">.</span><span class="pln">urlopen</span><span class="pun">(</span><span class="pln">req</span><span class="pun">)</span><span class="pln">
+        response </span><span class="pun">=</span><span class="pln"> f</span><span class="pun">.</span><span class="pln">read</span><span class="pun">()</span><span class="pln">
+        </span><span class="kwd">print</span><span class="pln"> response
+        f</span><span class="pun">.</span><span class="pln">close</span><span class="pun">()</span><span class="pln">
+        time</span><span class="pun">.</span><span class="pln">sleep</span><span class="pun">(</span><span class="lit">60</span><span class="pun">)</span></code></pre><p>nohup python moniItems.py &gt;/dev/null 2&gt;&amp;1 &amp; 在被监控主机上运行，如果出于实验目的，想尽快的看到展示效果，可以将time.sleep(60) 改为time.sleep(2) ，这样每2秒就会取一次数据写入数据库。</p><p>访问 http://test.361way.com:8888 就可以看到我们的监控数据了：效果图如下</p><p><a rel="nofollow external" href="http://www.361way.com/wp-content/uploads/2015/04/flask-highcharts.png"><img alt="flask-highcharts" class="alignnone size-full wp-image-4263" height="435" src="./flask + mysql写的简单监控系统 - 为程序员服务_files/imgr(1)" width="793" onerror="return imgError(this)"></a></p><p>highcharts支持将按时间拖动，也支持按指定时间段查看。并且查看到的图片可以直接保存为png、jpg或pdf、csv等格式查看。</p><p><a href="http://ju.outofmemory.cn/entry/126800" rel="nofollow">flask + mysql写的简单监控系统</a>，首发于<a rel="nofollow external" href="http://www.361way.com/">运维之路</a>。</p>
+<div class="like">
+    <a href="javascript:void(0)" class="assertLogin" rel="nofollow" target="_self">点赞</a>
+</div>
+<div class="tags">
+<a class="tag" href="http://ju.outofmemory.cn/tag/flask/">flask</a>
+
+<a class="tag" href="http://ju.outofmemory.cn/tag/python/">python</a>
+
+</div>
+
+<div class="author">
+    <span class="name">作者：<a href="http://ju.outofmemory.cn/feed/1711/" title="运维之路">运维之路</a></span>
+    <div class="authorAvatar">
+        <a href="http://ju.outofmemory.cn/feed/1711/">
+            <img width="128" align="center" valign="absmiddle" src="./flask + mysql写的简单监控系统 - 为程序员服务_files/1711.png" alt="运维之路">
+        </a>
+    </div>
+    <div class="small">
+        关注Linux运维技术及互联网的IT科技博客
+    </div>
+    <div class="small">原文地址：<a rel="nofollow external" target="_blank" href="http://www.361way.com/flask-mysql-highcharts-monitor/4261.html">flask + mysql写的简单监控系统</a>, 感谢原作者分享。</div>
+</div>
+
+<div class="pn">
+    <span class="next"><mark>→</mark><a href="http://ju.outofmemory.cn/entry/126801">python hashlib模块及md5() 、sha()</a></span>
+    <span class="pre"><mark>←</mark><a href="http://ju.outofmemory.cn/entry/125774">Linux下HugePage内存功能配置</a></span>
+</div>
+
+<div class="comments">
+<a name="comments"></a>
+</div>
+
+
+<div class="newComment"><a name="newComment"></a>
+<h3>发表评论</h3>
+<form action="http://ju.outofmemory.cn/entry/comment/add" method="POST">
+    <input type="hidden" name="targetId" value="126800">
+    <input type="hidden" name="title" value="回复:flask + mysql写的简单监控系统">
+    <input type="hidden" name="replyId">
+    <textarea name="content" cols="100" rows="6" class="mdInput" style="width:98%"></textarea>
+    <p>
+        <button type="button" id="btnComment">发表评论</button><span id="commentTip"></span>
+    </p>
+</form>
+</div>
+
+
+
+
+</div>
+<div class="sidebar">
+    <div class="tgSide booksNail"><div class="cTitle">好书推荐</div><div><ul><li><div class="nail"><a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEgJSG1wcACJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIXAFUcUhcdS0IJRmtRcU0FBxowcGcQcTUYIUBlVHwyXyZlDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBRElgRBhACUCtcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsVBxUHUhJZCltXWwg%3D" target="_blank"><img src="./flask + mysql写的简单监控系统 - 为程序员服务_files/python-basic.jpg"></a></div><div class="title"><a class="bookName" href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEgJSG1wcACJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIXAFUcUhcdS0IJRmtRcU0FBxowcGcQcTUYIUBlVHwyXyZlDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBRElgRBhACUCtcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsVBxUHUhJZCltXWwg%3D" target="_blank"><nobr>Python基础教程（第2版 修订版）</nobr></a>[<a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEgJSG1wcACJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIXAFUcUhcdS0IJRmtRcU0FBxowcGcQcTUYIUBlVHwyXyZlDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBRElgRBhACUCtcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsVBxUHUhJZCltXWwg%3D" target="_blank">京东</a> &nbsp; <a href="https://www.amazon.cn/gp/product/B00KAFX65Q/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;camp=536&amp;creative=3200&amp;creativeASIN=B00KAFX65Q&amp;linkCode=as2&amp;tag=oucn-23" target="_blank">亚马逊</a>]</div></li><li><div class="nail"><a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEg9XHFgXCyJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIaBVIYWRwdS0IJRmt2d1lFKxspU2cXfRdDWBZKS3JTYwFDDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBREl4XChsCXStcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsVChAAVhlSCltXWwg%3D" target="_blank"><img src="./flask + mysql写的简单监控系统 - 为程序员服务_files/python-internal.jpg"></a></div><div class="title"><a class="bookName" href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEg9XHFgXCyJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIaBVIYWRwdS0IJRmt2d1lFKxspU2cXfRdDWBZKS3JTYwFDDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBREl4XChsCXStcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsVChAAVhlSCltXWwg%3D" target="_blank"><nobr>Python核心编程（第3版）</nobr></a>[<a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEg9XHFgXCyJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIaBVIYWRwdS0IJRmt2d1lFKxspU2cXfRdDWBZKS3JTYwFDDh43UxhZHQ" target="_blank">京东</a> &nbsp; <a href="https://www.amazon.cn/gp/product/B01FQAS0KK/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;camp=536&amp;creative=3200&amp;creativeASIN=B01FQAS0KK&amp;linkCode=as2&amp;tag=oucn-23" target="_blank">亚马逊</a>]</div></li><li><div class="nail"><a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEg9cGVgWBCJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIaDlcYWBMdS0IJRmtxHEJASxkmbWFoQwxcBF4HQU41XzxDDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBREl8VAhsAVytcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsVChsFVhhdCltXWwg%3D" target="_blank"><img src="./flask + mysql写的简单监控系统 - 为程序员服务_files/python-machine-learning.jpg"></a></div><div class="title"><a class="bookName" href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEg9cGVgWBCJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIaDlcYWBMdS0IJRmtxHEJASxkmbWFoQwxcBF4HQU41XzxDDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBREl8VAhsAVytcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsVChsFVhhdCltXWwg%3D" target="_blank"><nobr>Python机器学习及实践：从零开始通往Kaggle竞赛之路</nobr></a>[<a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEg9cGVgWBCJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIaDlcYWBMdS0IJRmtxHEJASxkmbWFoQwxcBF4HQU41XzxDDh43UxhZHQ" target="_blank">京东</a> &nbsp; <a href="https://www.amazon.cn/gp/product/B01M9813G3/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;camp=536&amp;creative=3200&amp;creativeASIN=B01M9813G3&amp;linkCode=as2&amp;tag=oucn-23" target="_blank">亚马逊</a>]</div></li><li><div class="nail"><a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEw9RHVoVBCJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMaA1MaWxMdS0IJRmtKf2xeKGgBXWFRdRN8ARxkaAQyRBN1Dh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBREl8TAhEAXStcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUChYBVBtdCltXWwg%3D" target="_blank"><img src="./flask + mysql写的简单监控系统 - 为程序员服务_files/python-deep-swallow.jpg"></a></div><div class="title"><a class="bookName" href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEw9RHVoVBCJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMaA1MaWxMdS0IJRmtKf2xeKGgBXWFRdRN8ARxkaAQyRBN1Dh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBREl8TAhEAXStcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUChYBVBtdCltXWwg%3D" target="_blank"><nobr>O'Reilly：深入浅出 Python（中文版）</nobr></a>[<a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEw9RHVoVBCJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMaA1MaWxMdS0IJRmtKf2xeKGgBXWFRdRN8ARxkaAQyRBN1Dh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBREl8TAhEAXStcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUChYBVBtdCltXWwg%3D" target="_blank">京东</a>]</div></li></ul></div></div><div class="similar entry">
+    <span class="title">您可能感兴趣的博客</span>
+    <div><ul class="similarEntries">
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/117/" title="Dante">Dante</a> 发表 <span class="time" title="2014-06-19 07:30:04">3年前</span></span>
+<a href="http://ju.outofmemory.cn/entry/80728" class="codeTitle">python常用web框架性能测试(django,flask,bottle,tornado)</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/3721/" title="">博主</a> 发表 <span class="time" title="2015-04-26 11:44:14">2年前</span></span>
+<a href="http://ju.outofmemory.cn/entry/156000" class="codeTitle">使用 Flask 和 Angularjs 开发 Web 系统</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/1711/" title="admin">admin</a> 发表 <span class="time" title="2015-05-29 08:25:03">2年前</span></span>
+<a href="http://ju.outofmemory.cn/entry/169992" class="codeTitle">解决Flask-SQLAlchemy中文乱码问题</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/3620/" title="admin">admin</a> 发表 <span class="time" title="2015-07-06 06:08:50">2年前</span></span>
+<a href="http://ju.outofmemory.cn/entry/197159" class="codeTitle">Windows搭建Flask开发环境[转]</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/2224/" title="博主">博主</a> 发表 <span class="time" title="2017-03-07 09:41:31">9月前</span></span>
+<a href="http://ju.outofmemory.cn/entry/304342" class="codeTitle">flask 源码解析：应用启动流程</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/3506/" title="">博主</a> 发表 <span class="time" title="2015-01-12 06:10:51">2年前</span></span>
+<a href="http://ju.outofmemory.cn/entry/152912" class="codeTitle">开始python-flask的学习</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/4078/" title="InBi&#39;s Blog">InBi's Blog</a> 发表 <span class="time" title="2013-11-05 15:47:15">4年前</span></span>
+<a href="http://ju.outofmemory.cn/entry/160482" class="codeTitle">Flask-SQLAlchemy 学习</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/1093/" title="">博主</a> 发表 <span class="time" title="2014-04-06 04:25:48">3年前</span></span>
+<a href="http://ju.outofmemory.cn/entry/69498" class="codeTitle">Charming Python: 从Flask的request说起</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/2048/" title="zrong">zrong</a> 发表 <span class="time" title="2017-02-06 12:15:31">10月前</span></span>
+<a href="http://ju.outofmemory.cn/entry/299991" class="codeTitle">EOF occurred in violation of protocol</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/1140/" title="vpsee">vpsee</a> 发表 <span class="time" title="2014-07-01 15:18:52">3年前</span></span>
+<a href="http://ju.outofmemory.cn/entry/82130" class="codeTitle">在 Django/Flask 开发服务器上使用 HTTPS</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/2224/" title="博主">博主</a> 发表 <span class="time" title="2017-03-06 09:31:38">9月前</span></span>
+<a href="http://ju.outofmemory.cn/entry/304343" class="codeTitle">Flask源码解析：简介</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/1839/" title="Neo">Neo</a> 发表 <span class="time" title="2014-07-13 23:04:08">3年前</span></span>
+<a href="http://ju.outofmemory.cn/entry/103507" class="codeTitle">在 DreamHost 上搭建 Flask 项目</a>
+</li>
+</ul>
+</div>
+</div>
+
+
+
+
+    <div>&nbsp;</div>
+    <div class="similar code">
+    <span class="title">您可能感兴趣的代码</span>
+    <div><ul class="similarCodes">
+    <li><span class="time" title="2014-07-22 09:14:23">3年前</span><a href="http://outofmemory.cn/code-snippet/13299/python-Flask-skeleton-get-user-IP-address-code">python Flask框架下获取用户的IP地址的范例代码</a> by <a href="http://outofmemory.cn/user/49">司马</a>
+</li>
+    <li><span class="time" title="2015-02-23 09:40:23">2年前</span><a href="http://outofmemory.cn/code-snippet/36001/python-pip-python3">ubuntu安装python3的python-pip</a> by <a href="http://outofmemory.cn/user/20">甄码农</a>
+</li>
+    <li><span class="time" title="2014-06-15 09:09:28">3年前</span><a href="http://outofmemory.cn/code-snippet/11070/python-usage-Flask-skeleton-introduction-code">python使用Flask框架的简单入门范例代码</a> by <a href="http://outofmemory.cn/user/157">西国の海妖</a>
+</li>
+    <li><span class="time" title="2013-06-04 13:43:27">4年前</span><a href="http://outofmemory.cn/code-snippet/3540/webpy-with-jinja2-template">web.py中自定义jinja2模块 </a> by <a href="http://outofmemory.cn/user/226">赵小全</a>
+</li>
+    <li><span class="time" title="2014-09-10 10:41:17">3年前</span><a href="http://outofmemory.cn/code-snippet/16280/Python-Flask-skeleton-upload-file-code">Python Flask框架中同时上传多个文件的详细代码演示</a> by <a href="http://outofmemory.cn/user/37">阮小七</a>
+</li>
+    <li><span class="time" title="2013-06-05 13:21:25">4年前</span><a href="http://outofmemory.cn/code-snippet/3557/python-connect-mysql-with-MySQLdb">python 使用MySQLdb连接mysql</a> by <a href="http://outofmemory.cn/user/191">玉开Sir</a>
+</li>
+    <li><span class="time" title="2014-07-01 16:17:50">3年前</span><a href="http://outofmemory.cn/code-snippet/12077/how-write-single-spell-review">怎样写一个拼写检查器</a> by <a href="http://outofmemory.cn/user/145">大猪</a>
+</li>
+    <li><span class="time" title="2014-07-01 19:34:38">3年前</span><a href="http://outofmemory.cn/code-snippet/12094/Python-through-ctypes-call-windows-api-function-ShellExecute">Python通过ctypes调用windows api函数ShellExecute</a> by <a href="http://outofmemory.cn/user/109">张宋付</a>
+</li>
+    <li><span class="time" title="2014-07-02 16:12:32">3年前</span><a href="http://outofmemory.cn/code-snippet/12138/e-hentai-picture">下载e-hentai的图片~~</a> by <a href="http://outofmemory.cn/user/157">西国の海妖</a>
+</li>
+    <li><span class="time" title="2014-07-02 20:59:53">3年前</span><a href="http://outofmemory.cn/code-snippet/12159/delete-SVN-directory-o-file">删除SVN目录和.o文件</a> by <a href="http://outofmemory.cn/user/97">Solon.Ring</a>
+</li>
+    <li><span class="time" title="2014-07-03 17:58:34">3年前</span><a href="http://outofmemory.cn/code-snippet/12206/Python-through-regular--access-callback">Python通过正则表达式选取callback</a> by <a href="http://outofmemory.cn/user/85">xwz</a>
+</li>
+    <li><span class="time" title="2014-07-03 21:54:51">3年前</span><a href="http://outofmemory.cn/code-snippet/12226/python-get-disk-rest-space-statvfs">python获得磁盘剩余空间 statvfs</a> by <a href="http://outofmemory.cn/user/133">风云轩</a>
+</li>
+</ul>
+</div>
+</div>
+
+
+
+    
+    
+    
+    
+</div>
+
+
+</div>
+<script src="./flask + mysql写的简单监控系统 - 为程序员服务_files/jquery-1.11.3.min.js"></script>
+<script>var isMobile= $('.sidebar').css('clear') == 'both';</script>
+<script src="./flask + mysql写的简单监控系统 - 为程序员服务_files/loginUser_v5" charset="utf-8"></script>
+<script src="./flask + mysql写的简单监控系统 - 为程序员服务_files/prettify.js" type="text/javascript"></script>
+<script src="./flask + mysql写的简单监控系统 - 为程序员服务_files/5.js"></script>
+<script>
+    var removeAD=true;
+    var voteTargetType='entry';var voteTargetId =126800;
+    var voting=false;
+    function onGetVoteStatus(status){
+        if(status.type != 0){
+            voting=true;
+            $('.like a').html('0赞');
+        }
+    }
+    $('.like a').click(function(){
+        if (!voting){
+            voting = true;
+            $.post("/"+voteTargetType+"/"+voteTargetId+"/vote", { type: '1'},
+            function (response, textStatus){
+                if(!response.success){
+                    alert(response.message);
+                } else {
+                    $('.like a').html((response.upCount||1) + '赞');
+                }
+            }, "json");
+        } else {
+            $('.like a').html('已赞');
+        }
+    });
+    $('pre,code').removeClass('prettyprint').addClass('prettyprint');
+    prettyPrint();
+    function displayPv(pv){
+        $('.pv b').html(pv + '');
+    }
+    function resizeImg(o,maxWidth) {
+        var img = $(o);
+        if(img.width() > maxWidth) {
+            var h = Math.round(maxWidth / img.width() * img.height());
+            img.width(maxWidth).height(h);
+        }
+    }
+    function resizeImgs(){
+        var maxWidth = $('div.author').width();
+        $('.content img').each(
+            function(i,o){resizeImg(o,maxWidth);}
+        );
+        var tg = $('.tgBD');
+        if(tg.width()>maxWidth){
+            tg.width(maxWidth+'px').css({'text-align':'center','overflow':'hidden',border:'1px solid transparent','border-radius':'2px','-moz-border-radius':'2px'});
+        }
+    }
+    $(resizeImgs);
+    $(window).resize(resizeImgs);
+    function showBooks(books) {
+        var h = '<div class="tgL books"><span>&nbsp;</span>好书：';
+        var maxCount = 5;
+        var lineCn = books.length>maxCount?maxCount:books.length;
+        function getProvidersHtml(b) {
+            var h='';
+            if (b.providers) {
+                h += '[';
+                var first = true;
+                for (var p in b.providers) {
+                    var pUrl = b.providers[p]['url'];
+                    
+                    if (first) {
+                        first = false;
+                    } else {
+                        h += ' &nbsp; ';
+                    }
+                    h += ('<a href="' + pUrl +'" target="_blank">' + p +  '</a>');
+                    
+                }
+                h += ']';
+            }
+            return h;
+        }
+
+        for (var i=0; i<lineCn;i++) {
+            if (i>0) h += '<span class="sep"> | </span>';
+            var book = books[i];
+            h += ('<a href="'+ book.url +'" target="_blank">' + book.title + '</a>');
+            h += getProvidersHtml(book);
+        }
+
+
+        h += '</div>';
+        $(h).insertBefore($('div.wrap'));
+
+        var rightHtml = '<div class="tgSide booksNail"><div class="cTitle">好书推荐</div>';
+        rightHtml += '<div><ul>';
+        var startIdx = books.length > 4 ? books.length-4 : 0;
+        for (var i=startIdx; i<books.length;i++) {
+            var book = books[i];
+            rightHtml += ('<li><div class="nail"><a href="' + book.url + '" target="_blank"><img src="//outofmemory.cn/static/book/' + book.image + '" /></a></div>');
+            rightHtml += ('<div class="title"><a class="bookName" href="'+book.url+'" target="_blank"><nobr>'+book.title+ '</nobr></a>');
+            var providerH = getProvidersHtml(book);
+            rightHtml += providerH;
+            rightHtml += '</div></li>';
+        }
+        rightHtml += '</ul></div>';
+        rightHtml += '</div>';
+
+        $(rightHtml).insertBefore($('div.sidebar div:first'))
+    }
+</script>
+<script src="./flask + mysql写的简单监控系统 - 为程序员服务_files/list" type="text/javascript"></script>
+
+
+<footer class="foot">
+© 2015 <a href="http://outofmemory.cn/">内存溢出</a>
+</footer>
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-36036446-1', 'outofmemory.cn');
+    ga('send', 'pageview');
+    ga('set',  '&uid', window.loginUser.id); // 使用已登录的 user_id 来设置用户 ID。
+</script>
+
+<div class="bdtj"><script type="text/javascript">
+
+
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?2051de3619785a7bff6213250ea9fbbd";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</div>
+<script>
+    function displayTG(k, h){
+        var display = typeof removeAD != 'undefined' && !removeAD;
+        if (!display) {
+            return;
+        }
+        if(k == 'jukeTopLine'){
+            $(h).insertBefore($('div.wrap'));
+        }
+    }
+    if(parseInt($('.content').css('marginRight')) > 50){
+        var contentHeight=$('.content').height();var sideHeight=$('.sidebar').height();
+        if(contentHeight<sideHeight) $('.content').css({'minHeight':sideHeight+'px'});
+    }
+</script>
+
+
+
+
+<script>window.__key__ = '74ccb03ea619bb0bbf80f00ef830078a';</script>
+<script src="./flask + mysql写的简单监控系统 - 为程序员服务_files/aes.js" type="text/javascript"></script>
+<script>
+$('form').submit(
+        function(e){
+            $('input[type="password"]').each(function(o){
+                var oPwd = $(this);
+                var pwd = oPwd.val();
+                if (pwd){
+                    var key = CryptoJS.enc.Latin1.parse(window.__key__.substring(0, 16));
+                    var iv = CryptoJS.enc.Latin1.parse(window.__key__.substring(16));
+                    //加密
+                    var encrypted = CryptoJS.AES.encrypt(pwd, key, {iv:iv,mode:CryptoJS.mode.CBC,padding:CryptoJS.pad.ZeroPadding});
+                    oPwd.val(encrypted.toString());
+                }
+            });
+        }
+);
+</script><div class="codeTools" style="left: 910px; top: 2164.48px;"><div id="copyCode" class="">复制代码</div><div id="saveCode">保存代码</div><div id="runCode" style="display: none;">试试效果</div></div><div style="position: absolute; left: 916px; top: 2172px; width: 64px; height: 12px; z-index: 99;"><embed id="ZeroClipboardMovie_1" src="/static/clipboard/ZeroClipboard10.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="64" height="12" name="ZeroClipboardMovie_1" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=1&amp;width=64&amp;height=12" wmode="transparent"></div><div id="naptha_container0932014_0707"></div></body><div></div></html>

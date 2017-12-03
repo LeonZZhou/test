@@ -1,0 +1,51 @@
+showBooks([
+  {
+    "url":"http://union-click.jd.com/jdc?e=0&p=AyIHZR5aEQISA1AYUyUCEgJSG1wcACJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIXAFUcUhcdS0IJRmtRcU0FBxowcGcQcTUYIUBlVHwyXyZlDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBRElgRBhACUCtcJVlHaVMbXkAGRgcASAlBAkA3ZStr&t=W1dCFBBFC1pXUwkEAEAdQFkJBVsVBxUHUhJZCltXWwg%3D",
+    "image":"python-basic.jpg",
+    "providers":{
+      "京东":{
+        "url":"http://union-click.jd.com/jdc?e=0&p=AyIHZR5aEQISA1AYUyUCEgJSG1wcACJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIXAFUcUhcdS0IJRmtRcU0FBxowcGcQcTUYIUBlVHwyXyZlDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBRElgRBhACUCtcJVlHaVMbXkAGRgcASAlBAkA3ZStr&t=W1dCFBBFC1pXUwkEAEAdQFkJBVsVBxUHUhJZCltXWwg%3D"
+      },
+      "亚马逊":{
+        "url":"https://www.amazon.cn/gp/product/B00KAFX65Q/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&camp=536&creative=3200&creativeASIN=B00KAFX65Q&linkCode=as2&tag=oucn-23"
+      }
+    },
+    "title":"Python基础教程（第2版 修订版）"
+  },
+  {
+    "url":"http://union-click.jd.com/jdc?e=0&p=AyIHZR5aEQISA1AYUyUCEg9XHFgXCyJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIaBVIYWRwdS0IJRmt2d1lFKxspU2cXfRdDWBZKS3JTYwFDDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBREl4XChsCXStcJVlHaVMbXkAGRgcASAlBAkA3ZStr&t=W1dCFBBFC1pXUwkEAEAdQFkJBVsVChAAVhlSCltXWwg%3D",
+    "image":"python-internal.jpg",
+    "providers":{
+      "京东":{
+        "url":"http://union-click.jd.com/jdc?e=0&p=AyIHZR5aEQISA1AYUyUCEg9XHFgXCyJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIaBVIYWRwdS0IJRmt2d1lFKxspU2cXfRdDWBZKS3JTYwFDDh43UxhZHQ"
+      },
+      "亚马逊":{
+        "url":"https://www.amazon.cn/gp/product/B01FQAS0KK/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&camp=536&creative=3200&creativeASIN=B01FQAS0KK&linkCode=as2&tag=oucn-23"
+      }
+    },
+    "title":"Python核心编程（第3版）"
+  },
+  {
+    "url":"http://union-click.jd.com/jdc?e=0&p=AyIHZR5aEQISA1AYUyUCEg9cGVgWBCJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIaDlcYWBMdS0IJRmtxHEJASxkmbWFoQwxcBF4HQU41XzxDDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBREl8VAhsAVytcJVlHaVMbXkAGRgcASAlBAkA3ZStr&t=W1dCFBBFC1pXUwkEAEAdQFkJBVsVChsFVhhdCltXWwg%3D",
+    "image":"python-machine-learning.jpg",
+    "providers":{
+      "京东":{
+        "url":"http://union-click.jd.com/jdc?e=0&p=AyIHZR5aEQISA1AYUyUCEg9cGVgWBCJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIaDlcYWBMdS0IJRmtxHEJASxkmbWFoQwxcBF4HQU41XzxDDh43UxhZHQ"
+      },
+      "亚马逊":{
+        "url":"https://www.amazon.cn/gp/product/B01M9813G3/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&camp=536&creative=3200&creativeASIN=B01M9813G3&linkCode=as2&tag=oucn-23"
+      }
+    },
+    "title":"Python机器学习及实践：从零开始通往Kaggle竞赛之路"
+  },
+  {
+    "url":"http://union-click.jd.com/jdc?e=0&p=AyIHZR5aEQISA1AYUyUCEw9RHVoVBCJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMaA1MaWxMdS0IJRmtKf2xeKGgBXWFRdRN8ARxkaAQyRBN1Dh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBREl8TAhEAXStcJVlHaVMbXkAGRgcASAlBAkA3ZStr&t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUChYBVBtdCltXWwg%3D",
+    "image":"python-deep-swallow.jpg",
+    "providers":{
+      "京东":{
+        "url":"http://union-click.jd.com/jdc?e=0&p=AyIHZR5aEQISA1AYUyUCEw9RHVoVBCJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMaA1MaWxMdS0IJRmtKf2xeKGgBXWFRdRN8ARxkaAQyRBN1Dh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBREl8TAhEAXStcJVlHaVMbXkAGRgcASAlBAkA3ZStr&t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUChYBVBtdCltXWwg%3D"
+      }
+    },
+    "title":"O'Reilly：深入浅出 Python（中文版）"
+  }
+])
