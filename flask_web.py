@@ -5,7 +5,7 @@ import MySQLdb as mysql
 import json
 from flask import Flask, request, render_template
 app = Flask(__name__)
-db = mysql.connect(user="root", passwd="kop/'.'",\
+db = mysql.connect(user="root", passwd="kop123",\
         db="falcon", charset="utf8")
 db.autocommit(True)
 c = db.cursor()
@@ -47,5 +47,7 @@ def signin():
 @app.route("/<name>",methods=["GET"])
 def test(name):
     return render_template("test.html",name=name)
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8888, debug=True)
