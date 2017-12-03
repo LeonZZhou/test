@@ -5,7 +5,7 @@ import MySQLdb as mysql
 import json
 from flask import Flask, request, render_template
 app = Flask(__name__)
-db = mysql.connect(user="root", passwd="kop",\
+db = mysql.connect(user="root", passwd="kop123",\
         db="falcon", charset="utf8")
 db.autocommit(True)
 c = db.cursor()
