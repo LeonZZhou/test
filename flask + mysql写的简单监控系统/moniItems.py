@@ -82,7 +82,7 @@ if __name__ == "__main__":
         m = mon()
         data = m.runAllGet()
         print data
-        req = urllib2.Request("http://207.246.95.230:8888", json.dumps(data), {'Content-Type': 'application/json'})
+        req = urllib2.Request("http://xxxip:8888", json.dumps(data), {'Content-Type': 'application/json'})
         f = urllib2.urlopen(req)
         response = f.read()
         print response
